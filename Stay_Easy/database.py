@@ -16,6 +16,7 @@ cur.execute(""" CREATE TABLE IF NOT EXISTS bookings(
         breakfast INTEGER NOT NULL,
         status TEXT NOT NULL,
         total_amount REAL NOT NULL,
+        refund_amount REAL NOT NULL,
         FOREIGN KEY (mobile) REFERENCES guests(mobile))""")
 conn.commit()
 print("Success")
