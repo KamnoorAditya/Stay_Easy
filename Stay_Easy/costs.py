@@ -1,14 +1,16 @@
+
 from datetime import datetime,timedelta
-from .models import StandardRoom,Suite,Deluxe
+from exceptions import Invalid_Date,Invalid_Guest_Details
 def calculate_prices(room,check_in,check_out,guest_count,breakfast=False,completed_stays=0):
-    check_in=datetime.strptime(check_in,"%d-%m-%Y").date()
-    check_out=datetime.strptime(check_out,"%d-%m-%Y").date()
-    if check_out <= check_in:
-        print("Invalid dates")
-        return None
-    if guest_count <= 0 or guest_count > room.max_guests():
-        print("Invalid guest count")
-        return None
+    try:
+        check_in=datetime.strptime(check_in,"%d-%m-%Y").date()
+        check_out=datetime.strptime(check_out,"%d-%m-%Y").date()
+    except ValueError:
+        raise Invalid_Date("Invalid date format")
+    if check_out<=check_in:
+        raise Invalid_Date("Check-out must be after check-in")
+    if guest_count<=0 or guest_count>room.max_guests():
+        raise Invalid_Guest_Details("Invalid guest count")
     total_nights=(check_out-check_in).days
     room_charges=0
     breakfast_charge=0
@@ -19,7 +21,7 @@ def calculate_prices(room,check_in,check_out,guest_count,breakfast=False,complet
     for i in range(total_nights):
         day=current_day.strftime("%A")
         daily_rates=room.base_rates()
-        if day=="Friday"or day=="Saturday":
+        if day=="Friday" or day=="Saturday":
             weekend=daily_rates*0.2
         else:
             weekend=0
@@ -46,13 +48,15 @@ def calculate_prices(room,check_in,check_out,guest_count,breakfast=False,complet
     loyalty_discount=0
     if completed_stays>=3:
         loyalty_discount=room_charges*0.05
-    total=(room_charges+extra_guest_charge+weekend_charges+breakfast_charge-loyalty_discount-long_stay_discount+gst_amount)
+    total=room_charges+extra_guest_charge+weekend_charges+breakfast_charge-loyalty_discount-long_stay_discount+gst_amount
     return {
-        "Nights":total_nights,"room_charges":room_charges,"weekend_charges":weekend_charges,"extra_guest_charges":extra_guest_charge,"Breakfast_charge":breakfast_charge,"gst":gst_amount,"loyalty_discount":loyalty_discount,"long_stay_discount":long_stay_discount,"total":total
+        "Nights":total_nights,
+        "room_charges":room_charges,
+        "weekend_charges":weekend_charges,
+        "extra_guest_charges":extra_guest_charge,
+        "Breakfast_charge":breakfast_charge,
+        "gst":gst_amount,
+        "loyalty_discount":loyalty_discount,
+        "long_stay_discount":long_stay_discount,
+        "total":total
     }
-        
-room =Deluxe(201,3)
-bill=calculate_prices(room,"06-11-2026","9-11-2026",3,breakfast=False,completed_stays=0)
-for key,value in bill.items():
-    print(key,value)
-            
