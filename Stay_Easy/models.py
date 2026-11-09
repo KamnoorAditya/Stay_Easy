@@ -134,3 +134,4 @@ class Booking:
         return False
     def __str__(self):
         return f"{self.booking_id} {self.guest.name} Room {self.room.room_no} {self.check_in} to {self.check_out} {self.status}"
+#Done

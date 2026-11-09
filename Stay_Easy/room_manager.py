@@ -43,6 +43,7 @@ def availability(room_type,guest_count,check_in,check_out):
     if room_type not in ["standard","deluxe","suite"]:
         raise ValueError("Invalid room type")
     try:
+        
         check_in=datetime.strptime(check_in,"%d-%m-%Y").date()
         check_out=datetime.strptime(check_out,"%d-%m-%Y").date()
     except ValueError:

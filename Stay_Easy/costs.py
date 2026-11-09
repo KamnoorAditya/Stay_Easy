@@ -60,3 +60,4 @@ def calculate_prices(room,check_in,check_out,guest_count,breakfast=False,complet
         "long_stay_discount":long_stay_discount,
         "total":total
     }
+#Done

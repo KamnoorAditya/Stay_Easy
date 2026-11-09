@@ -4,6 +4,7 @@ from datetime import datetime,timedelta
 import database
 from room_manager import records
 from costs import calculate_prices
+
 def view_booking_details(booking_id):
     conn=database.connect()
     cur=conn.cursor()

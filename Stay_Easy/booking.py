@@ -46,6 +46,7 @@ def create_booking(name,mobile,email,room_type,guest_count,check_in,check_out,br
     bill=calculate_prices(room,check_in,check_out,guest_count,breakfast,completed_stays)
     conn=database.connect()
     cur=conn.cursor()
+    
     try:
         if guest_data is None:
             cur.execute("INSERT INTO guests(mobile,name,email) VALUES(?,?,?)",(guest.phone,guest.name,guest.email))

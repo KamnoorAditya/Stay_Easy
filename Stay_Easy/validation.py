@@ -5,6 +5,7 @@ def validate_name(name):
         return True
 def validate_mobile(mobile):
     if len(mobile)!=10:
+        
         return False
     if not mobile.isdigit():
         return False
