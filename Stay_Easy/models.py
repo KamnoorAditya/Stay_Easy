@@ -1,22 +1,37 @@
+
 from abc import ABC,abstractmethod
 class Room(ABC):
-    def __init__(self,roll_no,floor):
-        self.__room_no=roll_no
-        self.__floor=floor
+    def __init__(self,room_no,floor):
+        self._room_no=room_no
+        self._floor=floor
+    @property
+    def room_no(self):
+        return self._room_no
+    @property
+    def floor(self):
+        return self._floor
+    @property
+    @abstractmethod
+    def room_type(self):
+        pass
     @abstractmethod
     def base_rates(self):
         pass
     @abstractmethod
     def max_guests(self):
         pass
+    @abstractmethod
     def breakfast_included(self):
         pass
     @abstractmethod
     def extra_guest_charge(self):
         pass
     def __str__(self):
-        return f"Room no :{self._room_no} Floor{self._floor}"
+        return f"Room no: {self._room_no} Floor: {self._floor}"
 class StandardRoom(Room):
+    @property
+    def room_type(self):
+        return "standard"
     def base_rates(self):
         return 2500
     def max_guests(self):
@@ -28,44 +43,51 @@ class StandardRoom(Room):
     def breakfast_charges(self):
         return 350
     def __str__(self):
-        return f"Standard{super.__str__()}"
+        return f"Standard {super().__str__()}"
 class Deluxe(Room):
+    @property
+    def room_type(self):
+        return "deluxe"
     def base_rates(self):
         return 4000
-    def max_guest(self):
+    def max_guests(self):
         return 3
     def breakfast_included(self):
         return True
-    def extra_guest_charge(self,guests):
+    def extra_guest_charge(self):
         return 800
-
-        
+    def __str__(self):
+        return f"Deluxe {super().__str__()}"
 class Suite(Room):
+    @property
+    def room_type(self):
+        return "suite"
     def base_rates(self):
         return 7500
     def max_guests(self):
         return 4
     def breakfast_included(self):
         return True
-    def extra_guest_charge(self,guests):
+    def extra_guest_charge(self):
         return 800
+    def __str__(self):
+        return f"Suite {super().__str__()}"
 class Guest:
-    
-        def __init__(self,name,mobile,email):
-            self._name=name
-            self._mobile=mobile
-            self._email=email
-            @property
-            def name(self):
-                return self._name
-            @property
-            def phone(self):
-                return self._mobile
-            @property
-            def email(self):
-                return self._email
-            def __str__(self):
-                return self._name
+    def __init__(self,name,mobile,email):
+        self._name=name
+        self._mobile=mobile
+        self._email=email
+    @property
+    def name(self):
+        return self._name
+    @property
+    def phone(self):
+        return self._mobile
+    @property
+    def email(self):
+        return self._email
+    def __str__(self):
+        return self._name
 class Booking:
     def __init__(self,booking_id,guest,room,check_in,check_out,guest_count,breakfast=False):
         self._booking_id=booking_id
@@ -76,47 +98,39 @@ class Booking:
         self._guest_count=guest_count
         self._status="CONFIRMED"
         self._breakfast=breakfast
-        @property
-        def booking_id(self):
-            return self._booking_id
-        @property
-        def guest(self):
-            return self._guest
-        @property
-        def room(self):
-            return self._room
-        @property
-        def check_in(self):
-            return self._check_in
-        @property
-        def check_out(self):
-            return self._check_out
-        @property
-        def guest_count(self):
-            return self._guest_count
-        @property
-        def breakafst(self):
-            return self._breakfast
-        @property
-        def status(self):
-            return self._status
-        def change_status(self,new_status):
-            if self._status=="CONFIRMED":
-                if new_status=="CHECKED IN" or new_status=="CANCELLED":
-                    self._status=new_status
-                else:
-                    print("Invalid Status")
-            elif self._status=="CHECKED IN":
-                if new_status=="CHECKED OUT":
-                    self._status=new_status
-                else:
-                    print("Invalid status change")
-            else:
-                print("Status cannot be changed")
-        def __str__(self):
-            return f"{self.booking_id} {self.guest.name} Room {self.room.room_no} {self.check_in} to {self.check_out} {self.status}"                
-                
-    
-            
-            
-     
+    @property
+    def booking_id(self):
+        return self._booking_id
+    @property
+    def guest(self):
+        return self._guest
+    @property
+    def room(self):
+        return self._room
+    @property
+    def check_in(self):
+        return self._check_in
+    @property
+    def check_out(self):
+        return self._check_out
+    @property
+    def guest_count(self):
+        return self._guest_count
+    @property
+    def breakfast(self):
+        return self._breakfast
+    @property
+    def status(self):
+        return self._status
+    def change_status(self,new_status):
+        if self._status=="CONFIRMED":
+            if new_status in ["CHECKED_IN","CANCELLED"]:
+                self._status=new_status
+                return True
+        elif self._status=="CHECKED_IN":
+            if new_status=="CHECKED_OUT":
+                self._status=new_status
+                return True
+        return False
+    def __str__(self):
+        return f"{self.booking_id} {self.guest.name} Room {self.room.room_no} {self.check_in} to {self.check_out} {self.status}"
