@@ -1,2 +1,0 @@
-booking_id,mobile,room_no,room_type,check_in,check_out,guest_count,breakfast,status,total_amount,refund_amount
-1,7676863290,201,deluxe,9-11-2026,12-11-2026,3,0,CHECKED_OUT,16128.0,0.0
